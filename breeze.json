@@ -1,0 +1,16 @@
+{
+    "KPlugin": {
+        "Description": "Window decoration using the Breeze visual style for the Plasma Desktop",
+        "EnabledByDefault": true,
+        "Id": "com.github.fauzie811.breeze10",
+        "Name": "Breeze10",
+        "ServiceTypes": [
+            "org.kde.kdecoration2"
+        ]
+    },
+    "org.kde.kdecoration2": {
+        "blur": true,
+        "defaultTheme": "Breeze10",
+        "kcmodule": true
+    }
+}
