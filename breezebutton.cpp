@@ -157,7 +157,7 @@ namespace Breeze
     void Button::drawIcon( QPainter *painter ) const
     {
 
-        painter->setRenderHints( QPainter::Antialiasing, false );
+        painter->setRenderHints( QPainter::Antialiasing );
 
         /*
         scale painter so that its window matches QRect( 0, 0, 30, 30 )
@@ -198,7 +198,7 @@ namespace Breeze
             // setup painter
             QPen pen( foregroundColor );
             pen.setCapStyle( Qt::FlatCap );
-            pen.setJoinStyle( Qt::BevelJoin );
+            pen.setJoinStyle( Qt::MiterJoin );
             // pen.setWidthF( 1.0*qMax((qreal)1.0, 30/width ) );
             pen.setWidthF( 1.0 );
 
@@ -216,8 +216,8 @@ namespace Breeze
                     painter->setPen( pen );
                     painter->setBrush( Qt::NoBrush );
 
-                    painter->drawLine( QPointF( 18, 10 ), QPointF( 28, 20 ) );
-                    painter->drawLine( QPointF( 18, 19 ), QPointF( 28, 10 ) );
+                    painter->drawLine( QPointF( 18.5, 10.5 ), QPointF( 28.5, 20.5 ) );
+                    painter->drawLine( QPointF( 18.5, 20.5 ), QPointF( 28.5, 10.5 ) );
                     break;
                 }
 
@@ -235,12 +235,12 @@ namespace Breeze
 
                     if (isChecked())
                     {
-                        painter->drawRect(QRectF(18.0, 12.0, 7.0, 7.0));
+                        painter->drawRect(QRectF(18.5, 12.5, 7.0, 7.0));
                         painter->drawPolyline(QPolygonF()
-                                                << QPointF(20, 12) << QPointF(20, 10) << QPointF(27, 10) << QPointF(27, 17) << QPointF(25, 17));
+                                                << QPointF(20.5, 12.5) << QPointF(20.5, 10.5) << QPointF(27.5, 10.5) << QPointF(27.5, 17.5) << QPointF(25.5, 17.5));
                     }
                     else {
-                        painter->drawRect(QRectF(18.0, 10.0, 9.0, 9.0));
+                        painter->drawRect(QRectF(18.5, 10.5, 9.0, 9.0));
                     }
 
                     break;
@@ -258,7 +258,7 @@ namespace Breeze
                     painter->setPen( pen );
                     painter->setBrush( Qt::NoBrush );
 
-                    painter->drawLine( QPointF( 18, 15 ), QPointF( 28, 15 ) );
+                    painter->drawLine( QPointF( 18.5, 15.5 ), QPointF( 28.5, 15.5 ) );
 
                     break;
                 }
@@ -391,9 +391,9 @@ namespace Breeze
                     painter->setPen( pen );
                     painter->setBrush( Qt::NoBrush );
 
-                    painter->drawLine( QPointF( 15, 11 ), QPointF( 31, 11 ) );
-                    painter->drawLine( QPointF( 15, 15 ), QPointF( 31, 15 ) );
-                    painter->drawLine( QPointF( 15, 19 ), QPointF( 31, 19 ) );
+                    painter->drawLine( QPointF( 15.5, 11.5 ), QPointF( 31.5, 11.5 ) );
+                    painter->drawLine( QPointF( 15.5, 15.5 ), QPointF( 31.5, 15.5 ) );
+                    painter->drawLine( QPointF( 15.5, 19.5 ), QPointF( 31.5, 19.5 ) );
                     break;
                 }
 
