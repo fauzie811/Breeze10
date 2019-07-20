@@ -147,6 +147,7 @@ namespace Breeze
 
     using KDecoration2::ColorRole;
     using KDecoration2::ColorGroup;
+    using KDecoration2::DecorationButtonType;
 
     //________________________________________________________________
     static int g_sDecoCount = 0;
@@ -449,10 +450,10 @@ namespace Breeze
 
         // adjust button position
         const int bHeight = captionHeight();
-        const int bWidth = buttonHeight() * 1.5;
         const int verticalOffset =  (captionHeight()-buttonHeight())/2;
         foreach( const QPointer<KDecoration2::DecorationButton>& button, m_leftButtons->buttons() + m_rightButtons->buttons() )
         {
+            const int bWidth = buttonHeight() * (button.data()->type() == DecorationButtonType::Menu ? 1.0 : 1.5);
             button.data()->setGeometry( QRectF( QPoint( 0, 0 ), QSizeF( bWidth, bHeight ) ) );
             static_cast<Button*>( button.data() )->setOffset( QPointF( 0, verticalOffset ) );
             static_cast<Button*>( button.data() )->setIconSize( QSize( bWidth, bHeight ) );
@@ -464,20 +465,7 @@ namespace Breeze
 
             m_leftButtons->setSpacing(0);
 
-            // padding
-            const int vPadding = 0;
-            const int hPadding = 0;
-            if( isLeftEdge() )
-            {
-                // add offsets on the side buttons, to preserve padding, but satisfy Fitts law
-                auto button = static_cast<Button*>( m_leftButtons->buttons().front().data() );
-                button->setGeometry( QRectF( QPoint( 0, 0 ), QSizeF( bWidth + hPadding, bHeight ) ) );
-                button->setFlag( Button::FlagFirstInList );
-                button->setHorizontalOffset( hPadding );
-
-                m_leftButtons->setPos(QPointF(0, vPadding));
-
-            } else m_leftButtons->setPos(QPointF(hPadding + borderLeft(), vPadding));
+            m_leftButtons->setPos(QPointF(borderLeft(), 0));
 
         }
 
@@ -488,18 +476,7 @@ namespace Breeze
             m_rightButtons->setSpacing(0);
 
             // padding
-            const int vPadding = 0;
-            const int hPadding = 0;
-            if( isRightEdge() )
-            {
-
-                auto button = static_cast<Button*>( m_rightButtons->buttons().back().data() );
-                button->setGeometry( QRectF( QPoint( 0, 0 ), QSizeF( bWidth + hPadding, bHeight ) ) );
-                button->setFlag( Button::FlagLastInList );
-
-                m_rightButtons->setPos(QPointF(size().width() - m_rightButtons->geometry().width(), vPadding));
-
-            } else m_rightButtons->setPos(QPointF(size().width() - m_rightButtons->geometry().width() - hPadding - borderRight(), vPadding));
+            m_rightButtons->setPos(QPointF(size().width() - m_rightButtons->geometry().width() - borderRight(), 0));
 
         }
 

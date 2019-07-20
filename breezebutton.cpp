@@ -48,7 +48,7 @@ namespace Breeze
 
         // setup default geometry
         const int height = decoration->buttonHeight();
-        const int width = height * 1.5;
+        const int width = height * (type == DecorationButtonType::Menu ? 1.0 : 1.5);
         setGeometry(QRect(0, 0, width, height));
         setIconSize(QSize( width, height ));
 
