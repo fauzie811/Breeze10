@@ -276,7 +276,7 @@ namespace Breeze
                     if( isChecked()) {
 
                         // outer ring
-                        painter->drawRect( QRectF( 3, 3, 12, 12 ) );
+                        painter->drawRect( QRectF( 16, 9, 12, 12 ) );
 
                         // center dot
                         QColor backgroundColor( this->backgroundColor() );
@@ -285,20 +285,20 @@ namespace Breeze
                         if( backgroundColor.isValid() )
                         {
                             painter->setBrush( backgroundColor );
-                            painter->drawRect( QRectF( 8, 8, 2, 2 ) );
+                            painter->drawRect( QRectF( 21, 14, 2, 2 ) );
                         }
 
                     } else {
 
                         painter->drawPolygon( QPolygonF()
-                            << QPointF( 6.5, 8.5 )
-                            << QPointF( 12, 3 )
-                            << QPointF( 15, 6 )
-                            << QPointF( 9.5, 11.5 ) );
+                            << QPointF( 19.5, 14.5 )
+                            << QPointF( 25, 9 )
+                            << QPointF( 28, 12 )
+                            << QPointF( 22.5, 17.5 ) );
 
                         painter->setPen( pen );
-                        painter->drawLine( QPointF( 5.5, 7.5 ), QPointF( 10.5, 12.5 ) );
-                        painter->drawLine( QPointF( 12, 6 ), QPointF( 4.5, 13.5 ) );
+                        painter->drawLine( QPointF( 18.5, 13.5 ), QPointF( 23.5, 18.5 ) );
+                        painter->drawLine( QPointF( 25, 12 ), QPointF( 17.5, 19.5 ) );
                     }
                     break;
                 }
