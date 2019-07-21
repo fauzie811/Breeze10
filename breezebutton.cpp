@@ -160,9 +160,9 @@ namespace Breeze
         painter->setRenderHints( QPainter::Antialiasing );
 
         /*
-        scale painter so that its window matches QRect( 0, 0, 30, 30 )
+        scale painter so that its window matches QRect( 0, 0, 45, 30 )
         this makes all further rendering and scaling simpler
-        all further rendering is preformed inside QRect( 0, 0, 30, 30 )
+        all further rendering is preformed inside QRect( 0, 0, 45, 30 )
         */
         painter->translate( geometry().topLeft() );
 
