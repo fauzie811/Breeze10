@@ -9,7 +9,7 @@ Breeze10 is a fork of KDE Breeze decoration with the following changes:
  * Opaqueness, opacity override is added to the exception list properties.
  * Title-bar font is set indpendent from the KDE font settings (for use outside KDE).
 
-## Credits:
+## Credits
 
 Breeze10 was started from BreezeEnhanced (https://github.com/tsujan/BreezeEnhanced), a former fork of Breeze with title-bar translucency and blurring.
 
@@ -26,7 +26,12 @@ sudo make install
 ```
 After the intallation, restart KWin by logging out and in. Then, Breeze10 will appear in *System Settings &rarr; Application Style &rarr; Window Decorations*.
 
-## Screenshots:
+## Known Issues
+
+- Cannot resize windows from the top border. I must have messed up something while modifying the code.
+- There's an unwanted 1px padding below the buttons. I haven't figured it out where it came from.
+
+## Screenshots
 
 ![Settings](screenshots/Settings.png?raw=true "Settings")
 
