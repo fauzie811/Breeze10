@@ -213,11 +213,13 @@ namespace Breeze
                         painter->setBrush( backgroundColor );
                         painter->drawRect( QRectF( 0, 0, 45, 30 ) );
                     }
+                    pen.setWidthF( 1.1 );
                     painter->setPen( pen );
                     painter->setBrush( Qt::NoBrush );
 
-                    painter->drawLine( QPointF( 18.5, 10.5 ), QPointF( 28.5, 20.5 ) );
-                    painter->drawLine( QPointF( 18.5, 20.5 ), QPointF( 28.5, 10.5 ) );
+                    painter->drawLine( QPointF( 18, 10 ), QPointF( 28, 20 ) );
+                    painter->drawLine( QPointF( 18, 20 ), QPointF( 28, 10 ) );
+                    pen.setWidthF( 1.0 );
                     break;
                 }
 
@@ -258,7 +260,7 @@ namespace Breeze
                     painter->setPen( pen );
                     painter->setBrush( Qt::NoBrush );
 
-                    painter->drawLine( QPointF( 18.5, 15.5 ), QPointF( 28.5, 15.5 ) );
+                    painter->drawLine( QPointF( 18, 15.5 ), QPointF( 28, 15.5 ) );
 
                     break;
                 }
@@ -391,9 +393,9 @@ namespace Breeze
                     painter->setPen( pen );
                     painter->setBrush( Qt::NoBrush );
 
-                    painter->drawLine( QPointF( 15.5, 11.5 ), QPointF( 31.5, 11.5 ) );
-                    painter->drawLine( QPointF( 15.5, 15.5 ), QPointF( 31.5, 15.5 ) );
-                    painter->drawLine( QPointF( 15.5, 19.5 ), QPointF( 31.5, 19.5 ) );
+                    painter->drawLine( QPointF( 15, 11.5 ), QPointF( 30, 11.5 ) );
+                    painter->drawLine( QPointF( 15, 15.5 ), QPointF( 30, 15.5 ) );
+                    painter->drawLine( QPointF( 15, 19.5 ), QPointF( 30, 19.5 ) );
                     break;
                 }
 
