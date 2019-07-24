@@ -450,12 +450,10 @@ namespace Breeze
 
         // adjust button position
         const int bHeight = captionHeight();
-        const int verticalOffset =  (captionHeight()-buttonHeight())/2;
         foreach( const QPointer<KDecoration2::DecorationButton>& button, m_leftButtons->buttons() + m_rightButtons->buttons() )
         {
             const int bWidth = buttonHeight() * (button.data()->type() == DecorationButtonType::Menu ? 1.0 : 1.5);
             button.data()->setGeometry( QRectF( QPoint( 0, 0 ), QSizeF( bWidth, bHeight ) ) );
-            static_cast<Button*>( button.data() )->setOffset( QPointF( 0, verticalOffset ) );
             static_cast<Button*>( button.data() )->setIconSize( QSize( bWidth, bHeight ) );
         }
 
@@ -503,9 +501,6 @@ namespace Breeze
             winCol.setAlpha(titleBarAlpha());
             painter->setBrush(winCol);
 
-            // clip away the top part
-            if( !hideTitleBar() ) painter->setClipRect(0, borderTop(), size().width(), size().height() - borderTop(), Qt::IntersectClip);
-
             painter->drawRect( rect() );
 
             painter->restore();
@@ -546,17 +541,6 @@ namespace Breeze
 
         auto s = settings();
         painter->drawRect(titleRect);
-
-        // this would be ugly
-        /*const QColor outlineColor( this->outlineColor() );
-        if( !c->isShaded() && outlineColor.isValid() )
-        {
-            // outline
-            painter->setRenderHint( QPainter::Antialiasing, false );
-            painter->setBrush( Qt::NoBrush );
-            painter->setPen( outlineColor );
-            painter->drawLine( titleRect.bottomLeft(), titleRect.bottomRight() );
-        }*/
 
         painter->restore();
 
