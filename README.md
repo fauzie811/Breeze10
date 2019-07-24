@@ -29,7 +29,6 @@ After the intallation, restart KWin by logging out and in. Then, Breeze10 will a
 ## Known Issues
 
 - Cannot resize windows from the top border. I must have messed up something while modifying the code.
-- There's an unwanted 1px padding below the buttons. I haven't figured it out where it came from.
 
 ## Screenshots
 
