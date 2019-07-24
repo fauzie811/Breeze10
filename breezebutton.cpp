@@ -140,7 +140,10 @@ namespace Breeze
         {
 
             // const QRectF iconRect( geometry().topLeft(), m_iconSize );
-            const QRectF iconRect( 7.0, 7.0, 16.0, 16.0 );
+            const int menuIconSize = (qobject_cast<Decoration *>(decoration()))->iconSize();
+            const qreal topLeft = (geometry().width()/2) - (menuIconSize/2);
+
+            const QRectF iconRect(topLeft + geometry().left(), topLeft + geometry().top(), menuIconSize, menuIconSize);
             decoration()->client().data()->icon().paint(painter, iconRect.toRect());
 
         } else {
