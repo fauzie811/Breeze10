@@ -322,7 +322,7 @@ namespace Breeze
                 case InternalSettings::BorderNone: return 0;
                 case InternalSettings::BorderNoSides: return bottom ? qMax(4, baseSize) : 0;
                 default:
-                case InternalSettings::BorderTiny: return bottom ? qMax(4, baseSize) : baseSize;
+                case InternalSettings::BorderTiny: return baseSize;
                 case InternalSettings::BorderNormal: return baseSize*2;
                 case InternalSettings::BorderLarge: return baseSize*3;
                 case InternalSettings::BorderVeryLarge: return baseSize*4;
@@ -337,7 +337,7 @@ namespace Breeze
                 case KDecoration2::BorderSize::None: return 0;
                 case KDecoration2::BorderSize::NoSides: return bottom ? qMax(4, baseSize) : 0;
                 default:
-                case KDecoration2::BorderSize::Tiny: return bottom ? qMax(4, baseSize) : baseSize;
+                case KDecoration2::BorderSize::Tiny: return baseSize;
                 case KDecoration2::BorderSize::Normal: return baseSize*2;
                 case KDecoration2::BorderSize::Large: return baseSize*3;
                 case KDecoration2::BorderSize::VeryLarge: return baseSize*4;
@@ -392,7 +392,7 @@ namespace Breeze
 
             // padding below
             // extra pixel is used for the active window outline
-            top += 1;
+            // top += 1;
 
         }
 
@@ -578,7 +578,7 @@ namespace Breeze
 
     //________________________________________________________________
     int Decoration::captionHeight() const
-    { return hideTitleBar() ? borderTop() : borderTop() - 1; }
+    { return borderTop(); }
 
     //________________________________________________________________
     QPair<QRect,Qt::Alignment> Decoration::captionRect() const
