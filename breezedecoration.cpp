@@ -602,9 +602,17 @@ namespace Breeze
         else {
 
             auto c = client().data();
-            const int leftOffset = m_leftButtons->buttons().isEmpty() ?
+            int leftOffset = m_leftButtons->buttons().isEmpty() ?
                 4.0*settings()->smallSpacing():
                 m_leftButtons->geometry().x() + m_leftButtons->geometry().width() + 4.0*settings()->smallSpacing();
+
+            if (!m_leftButtons->buttons().isEmpty() 
+                && m_leftButtons->buttons().last().data()->type() == DecorationButtonType::Menu 
+                && m_internalSettings->titleAlignment() == InternalSettings::AlignLeft)
+            {
+                leftOffset -= 4.0 * settings()->smallSpacing();
+            }
+            
 
             const int rightOffset = m_rightButtons->buttons().isEmpty() ?
                 4.0*settings()->smallSpacing() :
