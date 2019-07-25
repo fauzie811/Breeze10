@@ -486,6 +486,9 @@ namespace Breeze
             winCol.setAlpha(titleBarAlpha());
             painter->setBrush(winCol);
 
+            // clip away the top part
+            if( !hideTitleBar() ) painter->setClipRect(0, borderTop(), size().width(), size().height() - borderTop(), Qt::IntersectClip);
+
             painter->drawRect( rect() );
 
             painter->restore();
