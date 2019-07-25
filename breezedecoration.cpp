@@ -280,10 +280,11 @@ namespace Breeze
     {
         auto s = settings();
         auto c = client().data();
-        const int width =  c->width();
-        const int height = borderTop();
-        const int x = 0;
-        const int y = 0;
+        const bool maximized = isMaximized();
+        const int width =  c->width() - (borderSize()*2);
+        const int height = maximized ? borderTop() : borderTop() - borderSize();
+        const int x = borderSize();
+        const int y = maximized ? 0 : borderSize();
         setTitleBar(QRect(x, y, width, height));
     }
 
@@ -322,13 +323,13 @@ namespace Breeze
                 case InternalSettings::BorderNone: return 0;
                 case InternalSettings::BorderNoSides: return bottom ? qMax(4, baseSize) : 0;
                 default:
-                case InternalSettings::BorderTiny: return baseSize;
-                case InternalSettings::BorderNormal: return baseSize*2;
-                case InternalSettings::BorderLarge: return baseSize*3;
-                case InternalSettings::BorderVeryLarge: return baseSize*4;
-                case InternalSettings::BorderHuge: return baseSize*5;
-                case InternalSettings::BorderVeryHuge: return baseSize*6;
-                case InternalSettings::BorderOversized: return baseSize*10;
+                case InternalSettings::BorderTiny: return baseSize/2;
+                case InternalSettings::BorderNormal: return baseSize;
+                case InternalSettings::BorderLarge: return baseSize*2;
+                case InternalSettings::BorderVeryLarge: return baseSize*3;
+                case InternalSettings::BorderHuge: return baseSize*4;
+                case InternalSettings::BorderVeryHuge: return baseSize*5;
+                case InternalSettings::BorderOversized: return baseSize*8;
             }
 
         } else {
@@ -337,13 +338,13 @@ namespace Breeze
                 case KDecoration2::BorderSize::None: return 0;
                 case KDecoration2::BorderSize::NoSides: return bottom ? qMax(4, baseSize) : 0;
                 default:
-                case KDecoration2::BorderSize::Tiny: return baseSize;
-                case KDecoration2::BorderSize::Normal: return baseSize*2;
-                case KDecoration2::BorderSize::Large: return baseSize*3;
-                case KDecoration2::BorderSize::VeryLarge: return baseSize*4;
-                case KDecoration2::BorderSize::Huge: return baseSize*5;
-                case KDecoration2::BorderSize::VeryHuge: return baseSize*6;
-                case KDecoration2::BorderSize::Oversized: return baseSize*10;
+                case KDecoration2::BorderSize::Tiny: return baseSize/2;
+                case KDecoration2::BorderSize::Normal: return baseSize;
+                case KDecoration2::BorderSize::Large: return baseSize*2;
+                case KDecoration2::BorderSize::VeryLarge: return baseSize*3;
+                case KDecoration2::BorderSize::Huge: return baseSize*4;
+                case KDecoration2::BorderSize::VeryHuge: return baseSize*5;
+                case KDecoration2::BorderSize::Oversized: return baseSize*8;
 
             }
 
@@ -385,15 +386,10 @@ namespace Breeze
         int top = 0;
         if( hideTitleBar() ) top = bottom;
         else {
-
+            top += isMaximized() ? 0 : borderSize();
             QFont f; f.fromString(m_internalSettings->titleBarFont());
             QFontMetrics fm(f);
             top += qMax(fm.height(), buttonHeight() );
-
-            // padding below
-            // extra pixel is used for the active window outline
-            // top += 1;
-
         }
 
         setBorders(QMargins(left, top, right, bottom));
@@ -401,19 +397,18 @@ namespace Breeze
         // extended sizes
         const int extSize = s->largeSpacing();
         int extSides = 0;
+        int extTop = 0;
         int extBottom = 0;
-        if( hasNoBorders() )
+        if( hasNoBorders() || borderSize() < 2 )
         {
             extSides = extSize;
             extBottom = extSize;
-
+            extTop = extSize;
         } else if( hasNoSideBorders() ) {
-
             extSides = extSize;
-
         }
 
-        setResizeOnlyBorders(QMargins(extSides, 0, extSides, extBottom));
+        setResizeOnlyBorders(QMargins(extSides, extTop, extSides, extBottom));
     }
 
     //________________________________________________________________
@@ -434,7 +429,7 @@ namespace Breeze
         const auto s = settings();
 
         // adjust button position
-        const int bHeight = captionHeight();
+        const int bHeight = buttonHeight();
         foreach( const QPointer<KDecoration2::DecorationButton>& button, m_leftButtons->buttons() + m_rightButtons->buttons() )
         {
             const int bWidth = buttonHeight() * (button.data()->type() == DecorationButtonType::Menu ? 1.0 : 1.5);
@@ -442,13 +437,15 @@ namespace Breeze
             static_cast<Button*>( button.data() )->setIconSize( QSize( bWidth, bHeight ) );
         }
 
+        const bool maximized = isMaximized();
+
         // left buttons
         if( !m_leftButtons->buttons().isEmpty() )
         {
 
             m_leftButtons->setSpacing(0);
 
-            m_leftButtons->setPos(QPointF(borderLeft(), 0));
+            m_leftButtons->setPos(QPointF(borderLeft(), maximized ? 0 : borderSize()));
 
         }
 
@@ -459,7 +456,7 @@ namespace Breeze
             m_rightButtons->setSpacing(0);
 
             // padding
-            m_rightButtons->setPos(QPointF(size().width() - m_rightButtons->geometry().width() - borderRight(), 0));
+            m_rightButtons->setPos(QPointF(size().width() - m_rightButtons->geometry().width() - borderRight(), maximized ? 0 : borderSize()));
 
         }
 
@@ -474,20 +471,27 @@ namespace Breeze
         auto c = client().data();
         auto s = settings();
 
+        const bool maximized = isMaximized();
+
         // paint background
-        if( !c->isShaded() )
+        if( borderSize() > 0 )
         {
             painter->fillRect(rect(), Qt::transparent);
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing);
             painter->setPen(Qt::NoPen);
 
-            QColor winCol = this->titleBarColor();
+            QColor winCol = c->isActive() ? KColorUtils::mix( titleBarColor(), Qt::black, 0.3 ) : titleBarColor();
             winCol.setAlpha(titleBarAlpha());
             painter->setBrush(winCol);
 
-            // clip away the top part
-            if( !hideTitleBar() ) painter->setClipRect(0, borderTop(), size().width(), size().height() - borderTop(), Qt::IntersectClip);
+            // clip away the titlebar part
+            if( !hideTitleBar() )
+            {
+                QRegion outerReg(rect());
+                QRegion innerReg(QRect(borderLeft(), maximized ? 0 : borderSize(), size().width() - borderLeft() - borderRight(), buttonHeight()));
+                painter->setClipRegion(outerReg.subtracted(innerReg));
+            }
 
             painter->drawRect( rect() );
 
@@ -515,7 +519,8 @@ namespace Breeze
     void Decoration::paintTitleBar(QPainter *painter, const QRect &repaintRegion)
     {
         const auto c = client().data();
-        const QRect titleRect(QPoint(0, 0), QSize(size().width(), borderTop()));
+        const bool maximized = isMaximized();
+        const QRect titleRect(QPoint(borderLeft(), maximized ? 0 : borderSize()), QSize(size().width() - borderLeft() - borderRight(), buttonHeight()));
 
         if ( !titleRect.intersects(repaintRegion) ) return;
 
@@ -580,10 +585,6 @@ namespace Breeze
     }
 
     //________________________________________________________________
-    int Decoration::captionHeight() const
-    { return borderTop(); }
-
-    //________________________________________________________________
     QPair<QRect,Qt::Alignment> Decoration::captionRect() const
     {
         if( hideTitleBar() ) return qMakePair( QRect(), Qt::AlignCenter );
@@ -606,8 +607,8 @@ namespace Breeze
                 4.0*settings()->smallSpacing() :
                 size().width() - m_rightButtons->geometry().x() + 4.0*settings()->smallSpacing();
 
-            const int yOffset = 0;
-            const QRect maxRect( leftOffset, yOffset, size().width() - leftOffset - rightOffset, captionHeight() );
+            const int yOffset = isMaximized() ? 0 : borderSize();
+            const QRect maxRect( leftOffset, yOffset, size().width() - leftOffset - rightOffset, buttonHeight() );
 
             switch( m_internalSettings->titleAlignment() )
             {
@@ -625,14 +626,14 @@ namespace Breeze
                 {
 
                     // full caption rect
-                    const QRect fullRect = QRect( 0, yOffset, size().width(), captionHeight() );
+                    const QRect fullRect = QRect( 0, yOffset, size().width(), buttonHeight() );
                     QFont f; f.fromString(m_internalSettings->titleBarFont());
                     QFontMetrics fm(f);
                     QRect boundingRect( fm.boundingRect( c->caption()) );
 
                     // text bounding rect
                     boundingRect.setTop( yOffset );
-                    boundingRect.setHeight( captionHeight() );
+                    boundingRect.setHeight( buttonHeight() );
                     boundingRect.moveLeft( ( size().width() - boundingRect.width() )/2 );
 
                     if( boundingRect.left() < leftOffset ) return qMakePair( maxRect, Qt::AlignVCenter|Qt::AlignLeft );
