@@ -28,7 +28,7 @@ After the intallation, restart KWin by logging out and in. Then, Breeze10 will a
 
 ## Known Issues
 
-- Cannot resize windows from the top border. I must have messed up something while modifying the code.
+None so far.
 
 ## Screenshots
 
