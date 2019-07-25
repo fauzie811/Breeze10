@@ -440,25 +440,17 @@ namespace Breeze
 
             return QColor();
 
-        } else if( isPressed() ) {
-
-            return d->titleBarColor();
-
-        /*} else if( type() == DecorationButtonType::Close && d->internalSettings()->outlineCloseButton() ) {
-
-            return d->titleBarColor();*/
-
         } else if( ( type() == DecorationButtonType::KeepBelow || type() == DecorationButtonType::KeepAbove ) && isChecked() ) {
 
             return d->titleBarColor();
 
-        } else if( m_animation->state() == QPropertyAnimation::Running ) {
+        } else if( m_animation->state() == QPropertyAnimation::Running && type() == DecorationButtonType::Close ) {
 
-            return KColorUtils::mix( d->fontColor(), d->titleBarColor(), m_opacity );
+            return KColorUtils::mix( d->fontColor(), Qt::white, m_opacity );
 
-        } else if( isHovered() ) {
+        } else if( isHovered() && type() == DecorationButtonType::Close ) {
 
-            return d->titleBarColor();
+            return Qt::white;
 
         } else {
 
@@ -478,10 +470,9 @@ namespace Breeze
 
         }
 
-        auto c = d->client().data();
         if( isPressed() ) {
 
-            if( type() == DecorationButtonType::Close ) return c->color( ColorGroup::Warning, ColorRole::Foreground );
+            if( type() == DecorationButtonType::Close ) return KColorUtils::mix( Qt::red, Qt::black, 0.3 );
             else return KColorUtils::mix( d->titleBarColor(), d->fontColor(), 0.3 );
 
         } else if( ( type() == DecorationButtonType::KeepBelow || type() == DecorationButtonType::KeepAbove ) && isChecked() ) {
@@ -490,24 +481,10 @@ namespace Breeze
 
         } else if( m_animation->state() == QPropertyAnimation::Running ) {
 
-            if( type() == DecorationButtonType::Close )
-            {
-                /*if( d->internalSettings()->outlineCloseButton() )
-                {
+            if( type() == DecorationButtonType::Close ) return KColorUtils::mix( d->titleBarColor(), Qt::red, m_opacity );
+            else {
 
-                    return KColorUtils::mix( d->fontColor(), c->color( ColorGroup::Warning, ColorRole::Foreground ).lighter(), m_opacity );
-
-                } else {*/
-
-                    QColor color( c->color( ColorGroup::Warning, ColorRole::Foreground ).lighter() );
-                    color.setAlpha( color.alpha()*m_opacity );
-                    return color;
-
-                //}
-
-            } else {
-
-                QColor color( d->fontColor() );
+                QColor color( KColorUtils::mix( d->titleBarColor(), d->fontColor(), 0.2 ) );
                 color.setAlpha( color.alpha()*m_opacity );
                 return color;
 
@@ -515,12 +492,8 @@ namespace Breeze
 
         } else if( isHovered() ) {
 
-            if( type() == DecorationButtonType::Close ) return c->color( ColorGroup::Warning, ColorRole::Foreground ).lighter();
-            else return d->fontColor();
-
-        /*} else if( type() == DecorationButtonType::Close && d->internalSettings()->outlineCloseButton() ) {
-
-            return d->fontColor();*/
+            if( type() == DecorationButtonType::Close ) return Qt::red;
+            else return KColorUtils::mix( d->titleBarColor(), d->fontColor(), 0.2 );
 
         } else {
 
